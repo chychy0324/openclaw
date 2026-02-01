@@ -24,10 +24,10 @@ COPY scripts ./scripts
 RUN pnpm install --frozen-lockfile
 
 COPY . .
-RUN OPENCLAW_A2UI_SKIP_MISSING=1 pnpm build
+RUN NODE_OPTIONS=--max-old-space-size=1024 OPENCLAW_A2UI_SKIP_MISSING=1 pnpm build
 # Force pnpm for UI build (Bun may fail on ARM/Synology architectures)
 ENV OPENCLAW_PREFER_PNPM=1
-RUN pnpm ui:build
+RUN NODE_OPTIONS=--max-old-space-size=1024 pnpm ui:build
 
 ENV NODE_ENV=production
 
