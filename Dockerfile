@@ -31,9 +31,12 @@ RUN NODE_OPTIONS=--max-old-space-size=1024 pnpm ui:build
 
 ENV NODE_ENV=production
 
+# Create data directory with proper permissions for non-root user
+RUN mkdir -p /data/.openclaw && chown -R node:node /data
+
 # Security hardening: Run as non-root user
 # The node:22-bookworm image includes a 'node' user (uid 1000)
 # This reduces the attack surface by preventing container escape via root privileges
 USER node
 
-CMD ["node", "dist/index.js"]
+CMD ["node", "dist/index.js", "gateway", "--allow-unconfigured"]
