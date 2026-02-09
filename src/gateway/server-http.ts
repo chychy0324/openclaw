@@ -143,6 +143,13 @@ export function createHooksRequestHandler(
 
     if (hooksConfig.mappings.length > 0) {
       try {
+        <font color="green"><b>      // Force 200 OK for LINE Webhook to fix 405/502 errors  
+      if (req.url === "/api/line/webhook" && req.method === "POST") {  
+        res.statusCode = 200;  
+        res.setHeader("Content-Type", "application/json");  
+        res.end(JSON.stringify({ status: "ok" }));  
+        return true;  
+      }</b></font>  
         const mapped = await applyHookMappings(hooksConfig.mappings, {
           payload: payload as Record<string, unknown>,
           headers,
