@@ -68,13 +68,6 @@ export function createHooksRequestHandler(
 ): HooksRequestHandler {
   const { getHooksConfig, bindHost, port, logHooks, dispatchAgentHook, dispatchWakeHook } = opts;
   return async (req, res) => {
-    // Force 200 OK for LINE Webhook to fix 405/502 errors
-    if (req.url && req.url.includes("/api/line/webhook")) {
-      res.statusCode = 200;
-      res.setHeader("Content-Type", "application/json");
-      res.end(JSON.stringify({ status: "ok" }));
-      return true;
-    }
     const hooksConfig = getHooksConfig();
     if (!hooksConfig) {
       return false;
